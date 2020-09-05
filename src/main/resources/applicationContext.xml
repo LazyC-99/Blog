@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:component-scan base-package="com.lzc">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--加载外部配置文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!--引用外部属性文件 -->
+    <bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
+        <property name="driverClass" value="${driverClass}"></property>
+        <property name="jdbcUrl" value="${jdbcUrl}"></property>
+        <property name="user" value="${user}"></property>
+        <property name="password" value="${password}"></property>
+    </bean>
+
+    <!--2.配置mybatis -->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="dataSource" ref="pooledDataSource"/>
+        <property name="mapperLocations" value="classpath:mapper/*Mapper.xml"/>
+    </bean>
+    <!--把每一个dao接口的实现加到ioc容器 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.lzc.dao"/>
+    </bean>
+
+    <!--3.配置事务管理 -->
+
+        <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <property name="dataSource" ref="pooledDataSource"></property>
+        </bean>
+
+    <!--配置事务增强,事务如何切入-->
+<!--        <tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+<!--            <tx:attributes>-->
+<!--                所有方法都是事务方法 -->
+<!--                <tx:method name="*"/>-->
+<!--                get开始的所有方法 -->
+<!--                <tx:method name="get*" read-only="true"/>-->
+<!--            </tx:attributes>-->
+<!--        </tx:advice>-->
+
+
+    <!--4.基于xml配置  aop事务控制 -->
+<!--        <bean id="trans_manager" ></bean>-->
+<!--        <aop:config>-->
+<!--    &lt;!&ndash;切入点表达式 &ndash;&gt;-->
+<!--            <aop:pointcut id="txPoint" expression="execution(* com.lzc.service..*())"/>-->
+<!--    &lt;!&ndash;配置事务增强&ndash;&gt;-->
+<!--            <aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint"/>-->
+<!--        </aop:config>-->
+
+
+
+
+</beans>

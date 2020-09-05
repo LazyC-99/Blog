@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="jdbc.properties"></properties>
+    <settings>
+        <!--开启延迟加载 -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--开启属性按需加载 -->
+        <setting name="aggressiveLazyLoading" value="false"/>
+        <!--开启全局(二级)缓存 -->
+        <setting name="cacheEnabled" value="true"/>
+        <!--开启驼峰命名规则 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--打印sql语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
+
+</configuration>

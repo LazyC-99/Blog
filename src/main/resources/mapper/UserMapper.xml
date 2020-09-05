@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lzc.dao.UserMapper">
+    <sql id="Base_Column_List">
+    user_id Id,
+    user_name Name,
+    user_pass Pass,
+    user_nickname Nickname,
+    user_email Email,
+    user_avatar Avatar,
+    user_reg_time RegTime,
+    user_last_login_time LastLoginTime,
+    user_access_permission AccessPermission,
+    user_status Status
+    </sql>
+
+    <select id="selectByName" resultType="com.lzc.bean.User" parameterType="java.lang.String">
+        select <include refid="Base_Column_List"/> from user where user_name = #{username} and user_status=1
+    </select>
+    <insert id="insertUser" parameterType="com.lzc.bean.User">
+        insert into user(user_id,user_name,user_pass,user_nickname,user_email,user_avatar,user_reg_time,user_last_login_time,
+        user_access_permission,user_status)
+        values (#{Id}, #{Name},#{Pass},#{Nickname},#{Email},#{Avatar},#{RegTime},#{LastLoginTime},#{AccessPermission},#{Status});
+    </insert>
+    <select id="UserCount" resultType="java.lang.Integer">
+        select count(*) from user
+    </select>
+</mapper>
