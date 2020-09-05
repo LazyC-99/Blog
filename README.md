@@ -1,2 +1,2 @@
-# SSM_BaseConfig
-初学SSM框架的基本配置
+#  PersonalBlog
+个人博客制作中....
