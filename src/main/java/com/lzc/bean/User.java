@@ -20,6 +20,6 @@ public class User {
     private String Avatar;
     private Date RegTime;
     private Date LastLoginTime;
-    private int AccessPermission;
-    private int Status;
+    private Integer AccessPermission;
+    private Integer Status;
 }

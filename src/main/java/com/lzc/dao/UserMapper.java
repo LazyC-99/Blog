@@ -18,4 +18,6 @@ public interface UserMapper {
 
 
     int UserCount();
+
+    int update(User user);
 }

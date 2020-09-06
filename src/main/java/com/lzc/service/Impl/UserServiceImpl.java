@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
         }else{
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String format = sdf.format(new Date());
-            user.setId(this.getMaxId()+1);
+            user.setId(this.getTotalUser()+1);
             user.setRegTime(sdf.parse(format));
             user.setAccessPermission(1);
             user.setStatus(1);
@@ -58,12 +58,26 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
     /**
-     * 获取用户中数
+     * 更新用户信息
+     * @param user
      * @return
      */
-    public int getMaxId(){
+    @Override
+    public Msg updateUser(User user) {
+        if(userMapper.update(user)==1){
+            return Msg.success("修改成功!!");
+        }else{
+            return Msg.fail("修改失败!!");
+        }
+    }
+
+
+    /**
+     * 获取用户总数
+     * @return
+     */
+    public int getTotalUser(){
         return userMapper.UserCount();
     }
 

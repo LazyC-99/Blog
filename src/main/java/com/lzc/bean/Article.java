@@ -12,15 +12,15 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 public class Article {
-    private int Id;
-    private int UserId;
-    private int CategoryId;
+    private Integer Id;
+    private Integer UserId;
+    private Integer CategoryId;
     private String Title;
     private String Content;
-    private int CommentCount;
-    private int ViewCount;
-    private int LikeCount;
+    private Integer CommentCount;
+    private Integer ViewCount;
+    private Integer LikeCount;
     private Date CreateTime;
     private Date UpdateTime;
-    private int Status;
+    private Integer Status;
 }

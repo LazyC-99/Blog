@@ -30,11 +30,24 @@ public class test {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = sdf.format(new Date());
         User user = new User();user.setName("admin"); user.setPass("123");
-        user.setId(userService.getMaxId()+1);
+        user.setId(userService.getTotalUser()+1);
         user.setRegTime(sdf.parse(format));
         user.setAccessPermission(1);
         user.setStatus(1);
         System.out.println(user);
         System.out.println(userMapper.insertUser(user)==1);
+    }
+    /**
+     *更新测试
+     * @throws ParseException
+     */
+    @Test
+    public void updateregTest() throws ParseException {
+        User user = new User();
+        user.setName("admin"); user.setPass("123456");
+        user.setId(1);
+        user.setAccessPermission(1);
+        user.setStatus(1);
+        userMapper.update(user);
     }
 }

@@ -3,7 +3,9 @@
                       http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1" metadata-complete="true">
 
-
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
   <!--配置spring容器启动 -->
   <context-param>
     <param-name>contextConfigLocation</param-name>

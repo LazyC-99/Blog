@@ -10,6 +10,11 @@
 	http://www.springframework.org/schema/tx
 	http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+    <!--保证静态资源能访问 -->
+    <mvc:default-servlet-handler/>
+    <!--开启SpringMVC注解支持 保证动态请求-->
+    <mvc:annotation-driven></mvc:annotation-driven>
+    <!--扫描 -->
     <context:component-scan base-package="com.lzc.controller" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
@@ -18,11 +23,27 @@
     <!--视图解析器 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/"/>
-        <property name="suffix" value=".jsp"/>
+        <property name="suffix" value=".html"/>
     </bean>
 
-    <!--保证静态资源能访问 -->
 
-    <!--开启SpringMVC注解支持 保证动态请求-->
-    <mvc:annotation-driven></mvc:annotation-driven>
+    <!-- thymeleaf的视图解析器 会与冲突ContentNegotiatingViewResolver-->
+    <bean id="viewResolver" class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+        <property name="characterEncoding" value="UTF-8"/>
+        <property name="templateEngine" ref="templateEngine"/>
+    </bean>
+    <!-- 模板引擎 -->
+    <bean id="templateEngine" class="org.thymeleaf.spring5.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver"/>
+    </bean>
+    <!-- 模板解析器 -->
+    <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+        <constructor-arg ref="servletContext"/>
+        <property name="prefix" value="/WEB-INF/templates/"/>
+        <property name="suffix" value=".html"/>
+        <property name="templateMode" value="HTML5"/>
+        <property name="cacheable" value="false"/>
+        <property name="characterEncoding" value="UTF-8"/>
+
+    </bean>
 </beans>

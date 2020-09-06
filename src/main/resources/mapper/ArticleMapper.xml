@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lzc.dao.ArticleMapper">
+    <sql id="Base_Column_List">
+    article_id,
+    article_user_id,
+    article_category_id,
+    article_title,
+    article_content,
+    aticle_comment_count,
+    article_view_count,
+    article_like_count,
+    aticle_create_time,
+    aticle_update_time,
+    aticle_status
+    </sql>
+    <sql id="Alias_Column_List">
+    article_id Id,
+    article_user_id UserId,
+    article_category_id CategoryId,
+    article_title Title,
+    article_content Content,
+    aticle_comment_count CommentCount,
+    article_view_count ViewCount,
+    article_like_count LikeCount,
+    aticle_create_time CreateTime,
+    aticle_update_time UpdateTime,
+    aticle_status Status
+    </sql>
+
+    <insert id="insertArticle" parameterType="com.lzc.bean.Article">
+        insert into article(<include refid="Base_Column_List"/>)
+        values (#{Id}, #{UserId},#{CategoryId},#{Title},#{Content},#{CommentCount},#{ViewCount},#{LikeCount},#{CreateTime},#{UpdateTime},#{Status});
+    </insert>
+    <select id="countArticle" resultType="java.lang.Integer">
+        select count(*) from article
+    </select>
+    <select id="getAllArticles" resultType="com.lzc.bean.Article">
+        select <include refid="Alias_Column_List"/> from article
+    </select>
+    <select id="getArticleById" resultType="com.lzc.bean.Article">
+        select <include refid="Alias_Column_List"/> from article where article_id=#{Id} and aticle_status=1
+    </select>
+    <select id="getArticleByUser" resultType="com.lzc.bean.Article">
+        select <include refid="Alias_Column_List"/> from article where article_user_id=#{userId} and aticle_status=1
+    </select>
+
+    <update id="deleteArticle">
+        update article set aticle_status = 0 where article_id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateArticle" parameterType="com.lzc.bean.User">
+        update article
+        <set>
+            <if test="UserId != null">
+                article_user_id = #{UserId,jdbcType=VARCHAR},
+            </if>
+            <if test="CategoryId != null">
+                article_category_id = #{CategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="Title != null">
+                article_title = #{Title,jdbcType=VARCHAR},
+            </if>
+            <if test="Content != null">
+                article_content = #{Content,jdbcType=VARCHAR},
+            </if>
+            <if test="CommentCount != null">
+                aticle_comment_count = #{CommentCount,jdbcType=INTEGER},
+            </if>
+            <if test="ViewCount != null">
+                article_view_count = #{ViewCount,jdbcType=INTEGER},
+            </if>
+            <if test="LikeCount != null">
+                article_like_count = #{LikeCount,jdbcType=INTEGER},
+            </if>
+            <if test="CreateTime != null">
+                aticle_create_timev = #{CreateTime,jdbcType=DATETIME},
+            </if>
+            <if test="UpdateTime != null">
+                aticle_update_time = #{UpdateTime,jdbcType=DATETIME},
+            </if>
+            <if test="Status != null">
+                aticle_status = #{Status,jdbcType=INTEGER},
+            </if>
+        </set>
+        where article_id = #{Id,jdbcType=BIGINT}
+    </update>
+</mapper>
