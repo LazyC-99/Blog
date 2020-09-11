@@ -1,6 +1,7 @@
 package com.lzc.service;
 
 import com.lzc.bean.Article;
+import com.lzc.bean.Comment;
 import com.lzc.bean.Msg;
 
 import java.text.ParseException;
@@ -18,4 +19,6 @@ public interface ArticleService {
     Msg getArticleById(Integer id);
 
     Msg getArticleByUser(Integer UserId);
+
+    Msg addComment(Comment comment);
 }

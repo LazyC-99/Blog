@@ -12,10 +12,10 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 public class Comment {
-    private int Id;
+    private Integer Id;
     private String Content;
-    private int ArticleId;
-    private int UserId;
+    private Integer ArticleId;
+    private Integer UserId;
     private Date CreateTime;
-    private int Status;
+    private Integer Status;
 }

@@ -1,6 +1,7 @@
 package com.lzc.service.Impl;
 
 import com.lzc.bean.Article;
+import com.lzc.bean.Comment;
 import com.lzc.bean.Msg;
 import com.lzc.bean.User;
 import com.lzc.dao.ArticleMapper;
@@ -26,14 +27,12 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public Msg addArticle(Article article) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String format = sdf.format(new Date());
         article.setId(this.getTotalArticle()+1);
         article.setCommentCount(0);
         article.setViewCount(0);
         article.setLikeCount(0);
-        article.setCreateTime(sdf.parse(format));
-        article.setUpdateTime(sdf.parse(format));
+        article.setCreateTime(cur_time());
+        article.setUpdateTime(cur_time());
         article.setStatus(1);
         articleMapper.insertArticle(article);
         return null;
@@ -46,6 +45,12 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public Msg updateArticle(Article article) {
+        try {
+            article.setUpdateTime(cur_time());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return Msg.fail("修改文章失败!!时间设置失败!!");
+        }
         if(articleMapper.updateArticle(article)!=1){
             return Msg.fail("修改文章失败!!");
         }else{
@@ -96,8 +101,9 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
+
     /**
-     * 根据id查文章
+     * 根据id查文章并增加阅读数
      * @param id
      * @return
      */
@@ -105,6 +111,8 @@ public class ArticleServiceImpl implements ArticleService {
     public Msg getArticleById(Integer id) {
         Article article = articleMapper.getArticleById(id);
         if(article!=null){
+            article.setViewCount(article.getViewCount()+1);
+            articleMapper.updateArticle(article);
             return Msg.success("文章查询成功!!").add("articleInfo",article);
         }else{
             return Msg.fail("文章不存在");
@@ -132,5 +140,30 @@ public class ArticleServiceImpl implements ArticleService {
      */
     public int getTotalArticle(){
         return articleMapper.countArticle();
+    }
+
+    /**
+     * 添加评论并增加文章评论数
+     * @param comment
+     * @return
+     */
+
+    @Override
+    public Msg addComment(Comment comment) {
+
+        return null;
+    }
+
+
+    /**
+     * 获取当前时间
+     * @return
+     * @throws ParseException
+     */
+    public Date cur_time() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = sdf.format(new Date());
+        Date cur_time = sdf.parse(format);
+        return cur_time;
     }
 }

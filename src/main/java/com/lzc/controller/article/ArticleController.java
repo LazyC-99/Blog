@@ -1,13 +1,16 @@
 package com.lzc.controller.article;
 
 import com.lzc.bean.Article;
+import com.lzc.bean.Comment;
 import com.lzc.bean.Msg;
+import com.lzc.bean.User;
 import com.lzc.service.Impl.ArticleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 
 @RestController
@@ -22,8 +25,9 @@ public class ArticleController {
      * @return
      */
     @PostMapping("/create")
-    public Msg createArticle(Article article){
-        System.out.println("添加新文章");
+    public Msg createArticle(Article article, HttpSession session){
+        User userInfo = (User)session.getAttribute("userInfo");
+        article.setUserId(userInfo.getId());
         try {
             articleService.addArticle(article);
             return Msg.success("文章添加成功!!");
@@ -43,7 +47,7 @@ public class ArticleController {
     }
 
     /**
-     * 单篇文章查询
+     * 单篇文章查看
      * @param id
      * @return
      */
@@ -81,5 +85,20 @@ public class ArticleController {
     public Msg delArticle(Article article){
         return articleService.updateArticle(article);
     }
+
+
+    /**
+     * 发表评论
+     * @param comment
+     * @return
+     */
+    @PostMapping("/comment")
+    public Msg createComment(Comment comment,HttpSession session){
+        User userInfo = (User)session.getAttribute("userInfo");
+        comment.setUserId(userInfo.getId());
+        return articleService.addComment(comment);
+    }
+
+
 
 }
