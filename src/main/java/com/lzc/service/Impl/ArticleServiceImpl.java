@@ -5,10 +5,12 @@ import com.lzc.bean.Comment;
 import com.lzc.bean.Msg;
 import com.lzc.bean.User;
 import com.lzc.dao.ArticleMapper;
+import com.lzc.dao.CommentMapper;
 import com.lzc.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,6 +20,8 @@ import java.util.List;
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
     ArticleMapper articleMapper;
+    @Autowired
+    CommentMapper commentMapper;
 
     /**
      * 添加文章
@@ -26,16 +30,21 @@ public class ArticleServiceImpl implements ArticleService {
      * @throws ParseException
      */
     @Override
-    public Msg addArticle(Article article) throws ParseException {
-        article.setId(this.getTotalArticle()+1);
-        article.setCommentCount(0);
-        article.setViewCount(0);
-        article.setLikeCount(0);
-        article.setCreateTime(cur_time());
-        article.setUpdateTime(cur_time());
-        article.setStatus(1);
-        articleMapper.insertArticle(article);
-        return null;
+    public Msg addArticle(Article article) {
+        try {
+            article.setId(this.getTotalArticle()+1);
+            article.setCommentCount(0);
+            article.setViewCount(0);
+            article.setLikeCount(0);
+            article.setCreateTime(cur_time());
+            article.setUpdateTime(cur_time());
+            article.setStatus(1);
+            articleMapper.insertArticle(article);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return Msg.fail("文章添加异常!!");
+        }
+        return Msg.success("文章添加成功!!");
     }
 
     /**
@@ -72,7 +81,6 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = new Article();
         article.setId(id);
         article.setStatus(StatusId);
-        System.out.println("要更新的:"+article);
         if (StatusId==1){
             articleMapper.updateArticle(article);
             return Msg.success("文章已恢复!!");
@@ -103,17 +111,19 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     /**
-     * 根据id查文章并增加阅读数
+     * 根据id查文章和评论并增加阅读数
      * @param id
      * @return
      */
     @Override
     public Msg getArticleById(Integer id) {
         Article article = articleMapper.getArticleById(id);
+        article.setViewCount(article.getViewCount()+1);
         if(article!=null){
-            article.setViewCount(article.getViewCount()+1);
             articleMapper.updateArticle(article);
-            return Msg.success("文章查询成功!!").add("articleInfo",article);
+//            articleMapper.setViewCount(article.getId(),article.getViewCount()+1);
+            List<Comment> comments = commentMapper.getCommentByArticle(article.getId());
+            return Msg.success("文章查询成功!!").add("articleInfo",article).add("articleComment",comments);
         }else{
             return Msg.fail("文章不存在");
         }
@@ -150,10 +160,28 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Msg addComment(Comment comment) {
+        try {
+            comment.setId(commentMapper.countComment()+1);
+            comment.setCreateTime(cur_time());
+            comment.setStatus(1);
+            commentMapper.insertComment(comment);
+            //为文章增加评论数
+            Article curArticle =  articleMapper.getArticleById(comment.getArticleId());
+            curArticle.setCommentCount(curArticle.getCommentCount()+1);
+            articleMapper.updateArticle(curArticle) ;
+            return Msg.success("评论成功!!");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return Msg.fail("评论异常!!");
+        }
 
-        return null;
     }
 
+    @Override
+    public Msg delComment(Integer commentId) {
+        commentMapper.delComment(commentId);
+        return Msg.success("评论删除成功!!");
+    }
 
     /**
      * 获取当前时间

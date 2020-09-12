@@ -7,9 +7,10 @@ import java.util.List;
 public interface ArticleMapper {
     int insertArticle(Article user);
 
-    int deleteArticle(Integer id);
 
     int updateArticle(Article user);
+
+    int setViewCount(Integer Id,Integer ViewCount);
 
     List<Article> getAllArticles();
 

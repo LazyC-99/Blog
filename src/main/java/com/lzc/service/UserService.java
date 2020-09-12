@@ -11,5 +11,5 @@ public interface UserService {
 
      Msg loginUser(User user);
 
-    Msg updateUser(User user);
+     Msg updateUser(User user);
 }

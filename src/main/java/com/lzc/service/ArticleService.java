@@ -21,4 +21,6 @@ public interface ArticleService {
     Msg getArticleByUser(Integer UserId);
 
     Msg addComment(Comment comment);
+
+    Msg delComment(Integer commentId);
 }

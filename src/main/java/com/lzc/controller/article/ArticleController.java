@@ -6,9 +6,7 @@ import com.lzc.bean.Msg;
 import com.lzc.bean.User;
 import com.lzc.service.Impl.ArticleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
@@ -24,24 +22,18 @@ public class ArticleController {
      * @param article
      * @return
      */
-    @PostMapping("/create")
+    @PutMapping("/create")
     public Msg createArticle(Article article, HttpSession session){
         User userInfo = (User)session.getAttribute("userInfo");
         article.setUserId(userInfo.getId());
-        try {
-            articleService.addArticle(article);
-            return Msg.success("文章添加成功!!");
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return Msg.fail("文章添加异常!!");
-        }
+        return articleService.addArticle(article);
     }
 
     /**
      * 查询所有文章
      * @return
      */
-    @PostMapping("/all")
+    @GetMapping("/all")
     public Msg getAllArticle(){
         return articleService.AllArticle();
     }
@@ -51,8 +43,8 @@ public class ArticleController {
      * @param id
      * @return
      */
-    @PostMapping("/single")
-    public Msg getArticle(Integer id){
+    @GetMapping("/topics/{id}")
+    public Msg getArticle(@PathVariable Integer id){
         return articleService.getArticleById(id);
     }
 
@@ -61,7 +53,7 @@ public class ArticleController {
      * @param UserId
      * @return
      */
-    @PostMapping("/userArticle")
+    @GetMapping("/userArticle")
     public Msg getUserArticle(Integer UserId){
         return articleService.getArticleByUser(UserId);
     }
@@ -71,7 +63,7 @@ public class ArticleController {
      * @param id
      * @return
      */
-    @PostMapping("/del")
+    @DeleteMapping("/del")
     public Msg delArticle(Integer id){
         return articleService.updateStatus(id,0);
     }
@@ -82,7 +74,7 @@ public class ArticleController {
      * @return
      */
     @PostMapping("/update")
-    public Msg delArticle(Article article){
+    public Msg updateArticle(Article article){
         return articleService.updateArticle(article);
     }
 
@@ -92,11 +84,16 @@ public class ArticleController {
      * @param comment
      * @return
      */
-    @PostMapping("/comment")
+    @PutMapping("/comment")
     public Msg createComment(Comment comment,HttpSession session){
         User userInfo = (User)session.getAttribute("userInfo");
         comment.setUserId(userInfo.getId());
         return articleService.addComment(comment);
+    }
+
+    @DeleteMapping("/comment")
+    public Msg delComment(Integer commentId){
+        return articleService.delComment(commentId);
     }
 
 

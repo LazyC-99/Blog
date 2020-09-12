@@ -48,8 +48,9 @@ public class UserServiceImpl implements UserService {
     public Msg loginUser(User user) {
         boolean exist = this.userExist(user.getName());
         if(exist){
-            if(this.loginCheck(user.getName(),user.getPass())){
-                return Msg.success("登录成功!!");
+            User userInfo = loginCheck(user.getName(), user.getPass());
+            if(userInfo!=null){
+                return Msg.success("登录成功!!").add("userInfo",userInfo);
             }else{
                 return Msg.fail("密码错误!!");
             }
@@ -96,12 +97,12 @@ public class UserServiceImpl implements UserService {
      * @param password
      * @return
      */
-    public boolean loginCheck(String username,String password){
+    public User loginCheck(String username,String password){
         User user = userMapper.selectByName(username);
         if(user.getPass().equals(password)){
-            return true;
+            return user;
         }else {
-            return false;
+            return null;
         }
     }
 }

@@ -3,15 +3,12 @@ import com.lzc.bean.Msg;
 import com.lzc.bean.User;
 import com.lzc.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 
 @RestController
-@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserServiceImpl userService;
@@ -21,7 +18,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @PostMapping("/reg")
+    @PutMapping("/user")
     public Msg reg(User user){
         try {
             return userService.addUser(user);
@@ -36,10 +33,12 @@ public class UserController {
      * @param user
      * @return
      */
-    @PostMapping("/login")
+    @GetMapping("/user")
     public Msg login(User user,HttpSession session){
-        session.setAttribute("userInfo",user);
-        return userService.loginUser(user);
+        Msg info =  userService.loginUser(user);
+        session.setAttribute("userInfo",info.getExtend().get("userInfo"));
+        System.out.println("登录用户信息:"+info.getExtend());
+        return info;
     }
 
     /**
@@ -47,7 +46,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @PostMapping("/update")
+    @PostMapping("/user")
     public Msg update(User user){
         return userService.updateUser(user);
     }
@@ -55,7 +54,7 @@ public class UserController {
      * 退出登录
      * @return
      */
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public Msg exit(HttpSession session){
         session.removeAttribute("userInfo");
         return Msg.success("退出登录!!");
