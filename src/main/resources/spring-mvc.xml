@@ -21,10 +21,10 @@
 
 
     <!--视图解析器 -->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/pages/"/>
-        <property name="suffix" value=".html"/>
-    </bean>
+<!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+<!--        <property name="prefix" value="/WEB-INF/templates/"/>-->
+<!--        <property name="suffix" value=".html"/>-->
+<!--    </bean>-->
 
 
     <!-- thymeleaf的视图解析器 会与冲突ContentNegotiatingViewResolver-->
@@ -37,13 +37,14 @@
         <property name="templateResolver" ref="templateResolver"/>
     </bean>
     <!-- 模板解析器 -->
-    <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
-        <constructor-arg ref="servletContext"/>
+    <bean id="templateResolver" class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
         <property name="prefix" value="/WEB-INF/templates/"/>
         <property name="suffix" value=".html"/>
+        <property name="characterEncoding" value="UTF-8"/>
+        <property name="order" value="1"/>
         <property name="templateMode" value="HTML5"/>
         <property name="cacheable" value="false"/>
-        <property name="characterEncoding" value="UTF-8"/>
-
     </bean>
+
+    <mvc:view-controller path="/" view-name="forward:/index"/>
 </beans>

@@ -3,15 +3,27 @@ import com.lzc.bean.Msg;
 import com.lzc.bean.User;
 import com.lzc.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 
-@RestController
+@Controller
 public class UserController {
     @Autowired
     private UserServiceImpl userService;
+
+    /**
+     * 页面跳转
+     * @param path
+     * @return
+     */
+    @GetMapping("{path}")
+    public String topage(@PathVariable String path){
+        return path;
+    }
 
     /**
      * 注册用户
@@ -19,6 +31,7 @@ public class UserController {
      * @return
      */
     @PutMapping("/user")
+    @ResponseBody
     public Msg reg(User user){
         try {
             return userService.addUser(user);
@@ -34,11 +47,11 @@ public class UserController {
      * @return
      */
     @GetMapping("/user")
-    public Msg login(User user,HttpSession session){
+    public String login(User user, HttpSession session, Model model){
         Msg info =  userService.loginUser(user);
         session.setAttribute("userInfo",info.getExtend().get("userInfo"));
-        System.out.println("登录用户信息:"+info.getExtend());
-        return info;
+        model.addAttribute("msg",info);
+        return "index";
     }
 
     /**
@@ -47,6 +60,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/user")
+    @ResponseBody
     public Msg update(User user){
         return userService.updateUser(user);
     }
@@ -55,9 +69,9 @@ public class UserController {
      * @return
      */
     @GetMapping("/logout")
-    public Msg exit(HttpSession session){
+    public String exit(HttpSession session){
         session.removeAttribute("userInfo");
-        return Msg.success("退出登录!!");
+        return "index";
 
     }
 
