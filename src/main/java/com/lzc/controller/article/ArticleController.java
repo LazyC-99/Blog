@@ -5,13 +5,15 @@ import com.lzc.bean.Comment;
 import com.lzc.bean.Msg;
 import com.lzc.bean.User;
 import com.lzc.service.Impl.ArticleServiceImpl;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.text.ParseException;
 
-@RestController
+@Controller
 @RequestMapping("/article")
 public class ArticleController {
     @Autowired
@@ -33,9 +35,10 @@ public class ArticleController {
      * 查询所有文章
      * @return
      */
-    @GetMapping("/all")
-    public Msg getAllArticle(){
-        return articleService.AllArticle();
+    @GetMapping("/list")
+    public String getAllArticle(Model model){
+        model.addAttribute("msg",articleService.AllArticle());
+        return "index";
     }
 
     /**
