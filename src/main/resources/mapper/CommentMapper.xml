@@ -10,7 +10,8 @@
     comment_aticle_id,
     comment_user_id ,
     comment_create_time,
-    comment_status
+    comment_status,
+
     </sql>
     <sql id="Alias_Column_List">
     comment_id Id,
@@ -31,7 +32,14 @@
     </update>
 
     <select id="getCommentByArticle" resultType="com.lzc.bean.Comment" >
-        select <include refid="Alias_Column_List"/> from article_comment where comment_aticle_id = #{ArticleId} and comment_status=1
+        select comment_id Id, comment_content Content, comment_aticle_id ArticleId,
+        comment_user_id UserId, comment_create_time CreateTime,
+        comment_status Status,user_name Name,user_nickname Nickname,
+        user_avatar Avatar
+        from article_comment
+        LEFT JOIN user on article_comment.comment_user_id=user_id
+        where comment_aticle_id = #{UserId}
+        and comment_status=1
     </select>
 
     <select id="getCommentByUser" resultType="com.lzc.bean.Comment" >

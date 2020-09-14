@@ -1,5 +1,7 @@
 package com.lzc.controller.article;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lzc.bean.Article;
 import com.lzc.bean.Comment;
 import com.lzc.bean.Msg;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/article")
@@ -36,8 +39,12 @@ public class ArticleController {
      * @return
      */
     @GetMapping("/list")
-    public String getAllArticle(Model model){
-        model.addAttribute("msg",articleService.AllArticle());
+    public String getAllArticle(@RequestParam(value = "currentPage",defaultValue ="1")Integer currentPage,Model model){
+        PageHelper.startPage(currentPage,3);
+        PageHelper.orderBy("article_id asc");
+
+        PageInfo pageInfo = new PageInfo((List) articleService.AllArticle().getExtend().get("articles"));
+        model.addAttribute("msg",pageInfo);
         return "index";
     }
 
@@ -47,8 +54,9 @@ public class ArticleController {
      * @return
      */
     @GetMapping("/topics/{id}")
-    public Msg getArticle(@PathVariable Integer id){
-        return articleService.getArticleById(id);
+    public String getArticle(@PathVariable Integer id,Model model){
+        model.addAttribute("msg",articleService.getArticleById(id));
+        return "blog-detail";
     }
 
     /**

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header class="header text-center" th:fragment="side">
+    <h1 class="blog-name pt-lg-4 mb-0"><a href="index.html" th:text="${session.userInfo==null?'请登录':session.userInfo.Name}">Anthony's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark" >
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column" >
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../static/assets/images/profile.png" alt="image" >
+
+                <div class="bio mb-3">Hi, my name is Anthony Doe. Briefly introduce yourself here. You can also provide a link to the about page.<br><a href="about.html">Find out more about me</a></div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="fab fa-stack-overflow fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="fab fa-codepen fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <div th:if="${session.userInfo!=null}">
+                <ul class="navbar-nav flex-column text-left" >
+                    <li class="nav-item active"  th:class="${activeUri=='bloghome'?'nav-item active':'nav-item'}">
+                        <a class="nav-link" href="index.html" th:href="@{/}"><i class="fas fa-home fa-fw mr-2"></i>Blog Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item" th:class="${activeUri=='blogpost'?'nav-item active':'nav-item'}">
+                        <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Post</a>
+                    </li>
+                    <li class="nav-item" th:class="${activeUri=='aboutme'?'nav-item active':'nav-item'}">
+                        <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>About Me</a>
+                    </li>
+                </ul>
+                <div class="my-2 my-md-3">
+                    <a class="btn btn-primary" href="/logout">Sign out</a>
+                </div>
+            </div>
+            <div th:if="${session.userInfo==null}">
+                <div class="my-2 my-md-3">
+                    <a class="btn btn-primary" href="/user" th:href="@{/user?Name=admin&Pass=123}" >Sign in</a>
+                </div>
+                <div class="my-2 my-md-3">
+                    <a class="btn btn-primary" href="" >Sign up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+</body>
+</html>

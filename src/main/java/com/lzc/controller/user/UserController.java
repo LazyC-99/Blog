@@ -51,7 +51,7 @@ public class UserController {
         Msg info =  userService.loginUser(user);
         session.setAttribute("userInfo",info.getExtend().get("userInfo"));
         model.addAttribute("msg",info);
-        return "index";
+        return "redirect:/article/list";
     }
 
     /**
@@ -71,7 +71,7 @@ public class UserController {
     @GetMapping("/logout")
     public String exit(HttpSession session){
         session.removeAttribute("userInfo");
-        return "index";
+        return "redirect:/article/list";
 
     }
 

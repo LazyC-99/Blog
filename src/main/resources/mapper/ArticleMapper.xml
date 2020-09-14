@@ -39,7 +39,7 @@
         select count(*) from article
     </select>
     <select id="getAllArticles" resultType="com.lzc.bean.Article">
-        select <include refid="Alias_Column_List"/> from article
+        select <include refid="Alias_Column_List"/> from article where aticle_status=1
     </select>
     <select id="getArticleById" resultType="com.lzc.bean.Article">
         select <include refid="Alias_Column_List"/> from article where article_id=#{Id} and aticle_status=1

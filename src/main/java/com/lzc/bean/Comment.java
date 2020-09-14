@@ -18,4 +18,8 @@ public class Comment {
     private Integer UserId;
     private Date CreateTime;
     private Integer Status;
+    //用户信息
+    private String Name;
+    private String Nickname;
+    private String Avatar;
 }
