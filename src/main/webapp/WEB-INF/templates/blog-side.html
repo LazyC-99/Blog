@@ -5,6 +5,9 @@
     <title>Title</title>
 </head>
 <body>
+
+
+
 <header class="header text-center" th:fragment="side">
     <h1 class="blog-name pt-lg-4 mb-0"><a href="index.html" th:text="${session.userInfo==null?'请登录':session.userInfo.Name}">Anthony's Blog</a></h1>
 
@@ -34,11 +37,11 @@
                     <li class="nav-item active"  th:class="${activeUri=='bloghome'?'nav-item active':'nav-item'}">
                         <a class="nav-link" href="index.html" th:href="@{/}"><i class="fas fa-home fa-fw mr-2"></i>Blog Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item" th:class="${activeUri=='blogpost'?'nav-item active':'nav-item'}">
-                        <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Post</a>
+                    <li class="nav-item" th:class="${activeUri=='blogstart'?'nav-item active':'nav-item'}">
+                        <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Start</a>
                     </li>
-                    <li class="nav-item" th:class="${activeUri=='aboutme'?'nav-item active':'nav-item'}">
-                        <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>About Me</a>
+                    <li class="nav-item" th:class="${activeUri=='blogeditor'?'nav-item active':'nav-item'}">
+                        <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>Write Blog</a>
                     </li>
                 </ul>
                 <div class="my-2 my-md-3">
@@ -47,14 +50,15 @@
             </div>
             <div th:if="${session.userInfo==null}">
                 <div class="my-2 my-md-3">
-                    <a class="btn btn-primary" href="/user" th:href="@{/user?Name=admin&Pass=123}" >Sign in</a>
+                    <a class="btn btn-primary"  th:href="@{/login}">Sign in</a>
                 </div>
                 <div class="my-2 my-md-3">
-                    <a class="btn btn-primary" href="" >Sign up</a>
+                    <a class="btn btn-primary" th:href="@{/register}" >Sign up</a>
                 </div>
             </div>
         </div>
     </nav>
 </header>
+
 </body>
 </html>

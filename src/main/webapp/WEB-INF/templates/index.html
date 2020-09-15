@@ -52,7 +52,7 @@
 									<span class="comment" th:text="${article.CommentCount}+'comment'"><a href="#"><span class="glyphicon glyphicon-envelope"></span>评论数量</a></span>
 									<span class="view" th:text="${article.ViewCount}+'read'"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span><a href="#">查看次数</a></span>
 								</div>
-								<div class="intro" th:text="${article.Content}">这里是内容...</div>
+								<div class="intro" th:text="${#strings.abbreviate(article.Content,53)}">这里是内容...</div>
 								<a class="more-link" href="blog-post.html" th:href="'/article/topics/'+${article.Id}">Read more &rarr;</a>
 							</div><!--//media-body-->
 						</div><!--//media-->
@@ -62,7 +62,7 @@
 
                 <nav class="blog-nav nav nav-justified my-5">
                     <a class="nav-link-prev nav-item nav-link rounded-left" href="index.html" th:href="@{'/article/list?currentPage='+${msg.pageNum>0?msg.pageNum-1:0}}">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
-                    <a class="nav-link-next nav-item nav-link rounded-right" href="blog-list.html" th:href="@{'/article/list?currentPage='+${msg.pageNum+1}}">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+                    <a class="nav-link-next nav-item nav-link rounded-right" href="index.html" th:href="@{'/article/list?currentPage='+${msg.pageNum+1}}">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
                 </nav>
 				
 		    </div>

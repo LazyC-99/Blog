@@ -33,7 +33,8 @@
 		<div class="container">
 			<!-- 标题 -->
 			<header class="blog-post-header">
-				<h2 class="title mb-2" th:text="${msg.extend.articleInfo.Title}">这里是标题!!!!</h2>
+				<input id="articleId" th:value="${msg.extend.articleInfo.Id}" type="hidden">
+				<h2 class="title mb-2" th:utext="${msg.extend.articleInfo.Title}">这里是标题!!!!</h2>
 				<div class="meta mb-1">
 					<span class="date" th:text="'发布时间:'+${#dates.format(msg.extend.articleInfo.CreateTime,'yyyy-MM-dd')}">发布时间</span>
 					<span class="time" th:text="'最后更新:'+${#dates.format(msg.extend.articleInfo.UpdateTime, 'yyyy-MM-dd')}">最后更新</span>
@@ -42,8 +43,9 @@
 				</div>
 			</header>
 
-			<div class="blog-post-body">
+			<div class="blog-post-body" th:text="${msg.extend.articleInfo.Content}">
 				这里是内容!!!!
+				<br/><br/><br/><br/><br/><br/><br/><br/>
 
 			</div>
 
@@ -52,16 +54,24 @@
 
 	<div class="theme-bg-light py-5 text-left p-md-5">
 		<h3>评论</h3>
+		<div id="comment-editor">
+
+		</div>
+		<div style="text-align: right">
+			<button id="comment-submit" class="btn btn-primary " >发表评论</button>
+		</div>
+
+
 		<div class="comment-list">
 			<div class="item mb-5 " th:each="Comment:${msg.extend.articleComment}">
 				<hr/>
 				<div class="media">
 					<div class="media-body">
-						<h4 class="title mb-1"><a href="/user" th:href="'/userInfo'+${Comment.UserId}" th:text="${Comment.Name}">评论用户!</a></h4>
+						<h4 class="title mb-1"><a href="/user" th:href="'/userInfo'+${Comment.UserId}" th:text="${Comment.Nickname}">评论用户!</a></h4>
 						<div class="meta mb-1">
 							<span class="date" th:text="'评论时间:'+${#dates.format(Comment.CreateTime,'yyyy-MM-dd')}">评论时间</span>
 						</div>
-						<div class="intro" th:text="${Comment.Content}">这里是评论内容...</div>
+						<div class="intro" th:utext="${Comment.Content}">这里是评论内容...</div>
 						<!--					<a class="more-link" href="blog-post.html" th:href="'/article/delComment/'+${Comment.Id}">删除评论</a>-->
 					</div><!--//media-body-->
 				</div><!--//media-->
@@ -113,6 +123,39 @@
 
 <!-- Style Switcher (REMOVE ON YOUR PRODUCTION SITE) -->
 <script src="../../static/assets/js/demo/style-switcher.js"></script>
+<script type="text/javascript" src="/static/js/wangEditor.min.js"></script>
+<script type="text/javascript">
+	var E = window.wangEditor
+	var editor = new E('#comment-editor')
+	// 或者 var editor = new E( document.getElementById('editor') )
+
+	editor.create()
+	let eds = document.getElementsByClassName('w-e-text-container')
+	eds[0].style = eds[0].style.cssText + 'height: 100px'
+
+
+	document.getElementById('comment-submit').addEventListener('click', function () {
+
+		$.ajax({
+			type:"put",
+			url:"/article/comment",
+			data:{
+				"Content":editor.txt.html(),
+				"ArticleId":$("#articleId").val()
+			},
+			success:function (result) {
+				alert(result.msg)
+				location.reload()
+				console.log(result)
+			}
+
+
+		})
+	}, false)
+
+
+</script>
+
 
 
 </body>

@@ -10,7 +10,7 @@
     comment_aticle_id,
     comment_user_id ,
     comment_create_time,
-    comment_status,
+    comment_status
 
     </sql>
     <sql id="Alias_Column_List">

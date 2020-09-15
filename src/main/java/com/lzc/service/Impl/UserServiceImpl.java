@@ -24,7 +24,9 @@ public class UserServiceImpl implements UserService {
     public Msg addUser(User user) throws ParseException {
         if (this.userExist(user.getName())){
             return Msg.fail("账户名已存在!!");
-        }else{
+        }else if(user==null||user.getName()==null||user.getName().equals("")||user.getPass()==null||user.getPass().equals("")){
+            return Msg.fail("用户名密码不能为空!!");
+        } else{
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String format = sdf.format(new Date());
             user.setId(this.getTotalUser()+1);
@@ -32,9 +34,9 @@ public class UserServiceImpl implements UserService {
             user.setAccessPermission(1);
             user.setStatus(1);
             if(userMapper.insertUser(user)==1){
-                return Msg.success("添加成功!!");
+                return Msg.success("注册成功!!");
             }else{
-                return Msg.fail("添加失败!!");
+                return Msg.fail("注册失败!!");
             }
         }
     }
@@ -50,6 +52,12 @@ public class UserServiceImpl implements UserService {
         if(exist){
             User userInfo = loginCheck(user.getName(), user.getPass());
             if(userInfo!=null){
+                try {
+                    userInfo.setLastLoginTime(cur_time());
+                } catch (ParseException e) {
+                    return Msg.fail("登录异常!!");
+                }
+                userMapper.update(userInfo);
                 return Msg.success("登录成功!!").add("userInfo",userInfo);
             }else{
                 return Msg.fail("密码错误!!");
@@ -104,5 +112,17 @@ public class UserServiceImpl implements UserService {
         }else {
             return null;
         }
+    }
+
+    /**
+     * 获取当前时间
+     * @return
+     * @throws ParseException
+     */
+    public Date cur_time() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = sdf.format(new Date());
+        Date cur_time = sdf.parse(format);
+        return cur_time;
     }
 }

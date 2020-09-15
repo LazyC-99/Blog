@@ -96,10 +96,15 @@ public class ArticleController {
      * @return
      */
     @PutMapping("/comment")
+    @ResponseBody
     public Msg createComment(Comment comment,HttpSession session){
         User userInfo = (User)session.getAttribute("userInfo");
-        comment.setUserId(userInfo.getId());
-        return articleService.addComment(comment);
+        if(userInfo==null){
+            return Msg.fail("请先登录!!");
+        }else{
+            comment.setUserId(userInfo.getId());
+            return articleService.addComment(comment);
+        }
     }
 
     @DeleteMapping("/comment")

@@ -46,12 +46,13 @@ public class UserController {
      * @param user
      * @return
      */
-    @GetMapping("/user")
-    public String login(User user, HttpSession session, Model model){
+    @PostMapping("/user/login")
+    @ResponseBody
+    public Msg login(User user, HttpSession session, Model model){
         Msg info =  userService.loginUser(user);
-        session.setAttribute("userInfo",info.getExtend().get("userInfo"));
-        model.addAttribute("msg",info);
-        return "redirect:/article/list";
+            session.setAttribute("userInfo",info.getExtend().get("userInfo"));
+            model.addAttribute("msg",info);
+            return info;
     }
 
     /**

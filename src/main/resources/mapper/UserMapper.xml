@@ -58,10 +58,10 @@
                 user_avatar = #{Avatar,jdbcType=VARCHAR},
             </if>
             <if test="RegTime != null">
-                user_reg_time = #{RegTime,jdbcType=DATETIME},
+                user_reg_time = #{RegTime,jdbcType=DATE},
             </if>
             <if test="LastLoginTime != null">
-                user_last_login_time = #{LastLoginTime,jdbcType=DATETIME},
+                user_last_login_time = #{LastLoginTime,jdbcType=DATE},
             </if>
             <if test="AccessPermission != null">
                 user_access_permission = #{AccessPermission,jdbcType=INTEGER},
