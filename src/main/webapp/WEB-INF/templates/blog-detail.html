@@ -144,8 +144,10 @@
 				"ArticleId":$("#articleId").val()
 			},
 			success:function (result) {
-				alert(result.msg)
-				location.reload()
+				if (result.code){
+					alert(result.msg)
+					location.href="/article/topics/"+$("#articleId").val()
+				}
 				console.log(result)
 			}
 

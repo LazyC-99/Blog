@@ -6,9 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
+import java.util.UUID;
 
 @Controller
 public class UserController {
@@ -62,7 +67,34 @@ public class UserController {
      */
     @PostMapping("/user")
     @ResponseBody
-    public Msg update(User user){
+    public Msg update(@RequestParam("file")MultipartFile file, User user, HttpSession session, HttpServletRequest req){
+        User userInfo = (User) session.getAttribute("userInfo");
+        if(userInfo==null){
+            return Msg.fail("请先登录!!");
+        }
+        if (!file.isEmpty()&&file!=null){
+            // 获取文件存储路径（绝对路径）
+            String path =  req.getServletContext().getRealPath("/WEB-INF/file");
+            // 获取原文件名
+            String fileName = file.getOriginalFilename();
+            String uuid = UUID.randomUUID().toString().replaceAll("-","").toUpperCase();
+            fileName=uuid+"_"+fileName;
+            // 创建文件实例
+            File filePath = new File(path, fileName);
+            // 写入文件
+            try {
+                file.transferTo(filePath);
+                user.setAvatar("/file/"+fileName);
+            } catch (IOException e) {
+                System.out.println("上传失败!!");
+                e.printStackTrace();
+            }
+        }
+        user.setId(userInfo.getId());
+        if ( userService.updateUser(user).isCode()){
+            session.removeAttribute("userInfo");
+            session.setAttribute("userInfo",user);
+        }
         return userService.updateUser(user);
     }
     /**

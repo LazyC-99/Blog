@@ -19,6 +19,7 @@
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
+    <mvc:view-controller path="/" view-name="forward:/article/list"/>
 
     <!--视图解析器 -->
 <!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
@@ -46,5 +47,17 @@
         <property name="cacheable" value="false"/>
     </bean>
 
-    <mvc:view-controller path="/" view-name="forward:/article/list"/>
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--上传文件的最大大小，单位为字节 -->
+        <property name="maxUploadSize" value="17367648787"></property>
+
+        <!-- 上传文件的编码 -->
+        <property name="defaultEncoding" value="UTF-8"></property>
+    </bean>
+
+    <!-- 资源映射 -->
+    <mvc:resources location="/WEB-INF/file/" mapping="/file/**"/>
+
 </beans>

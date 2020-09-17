@@ -9,7 +9,7 @@
 
 
 <header class="header text-center" th:fragment="side">
-    <h1 class="blog-name pt-lg-4 mb-0"><a href="index.html" th:text="${session.userInfo==null?'请登录':session.userInfo.Name}">Anthony's Blog</a></h1>
+    <h1 class="blog-name pt-lg-4 mb-0"><a th:href="@{/blog-user}"  th:text="${session.userInfo==null?'请登录':session.userInfo.Nickname}">Anthony's Blog</a></h1>
 
     <nav class="navbar navbar-expand-lg navbar-dark" >
 
@@ -19,9 +19,12 @@
 
         <div id="navigation" class="collapse navbar-collapse flex-column" >
             <div class="profile-section pt-3 pt-lg-0">
-                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../static/assets/images/profile.png" alt="image" >
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../static/assets/images/profile.png" th:src="${session.userInfo!=null?session.userInfo.avatar:'../../static/assets/images/profile.png'}" alt="image" >
 
-                <div class="bio mb-3">Hi, my name is Anthony Doe. Briefly introduce yourself here. You can also provide a link to the about page.<br><a href="about.html">Find out more about me</a></div><!--//bio-->
+                <div class="bio mb-3">
+                    Hi, my name is Anthony Doe. Briefly introduce yourself here. You can also provide a link to the about page.<br>
+                    <a href="blog-user.html.html" th:href="@{/blog-user}">修改个人资料</a>
+                </div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
                     <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
@@ -41,7 +44,7 @@
                         <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Start</a>
                     </li>
                     <li class="nav-item" th:class="${activeUri=='blogeditor'?'nav-item active':'nav-item'}">
-                        <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>Write Blog</a>
+                        <a class="nav-link" th:href="@{/blog-editor}"><i class="fas fa-user fa-fw mr-2"></i>Write Blog</a>
                     </li>
                 </ul>
                 <div class="my-2 my-md-3">
@@ -61,4 +64,6 @@
 </header>
 
 </body>
+
+
 </html>

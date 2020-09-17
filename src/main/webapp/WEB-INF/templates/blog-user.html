@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+    
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blog Template">
+    <meta name="author" content="Xiaoying Riley at 3rd Wave Media">    
+    <link rel="shortcut icon" href="../../static/favicon.ico">
+    <link rel="stylesheet" href="../../static/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/js/wangEditor.min.js"></script>
+    <script type="text/javascript" src="../../static/assets/plugins/jquery-3.3.1.min.js"></script>
+    <!-- Theme CSS -->  
+    <link id="theme-style" rel="stylesheet" href="../../static/assets/css/theme-1.css">
+    
+
+</head> 
+
+<body>
+
+<div th:replace="~{blog-side::side(activeUri='blogeditor')}"></div>
+
+
+<div class="main-wrapper">
+    <div class="text-center"><h1 >个人信息修改</h1></div>
+    <form class="form-horizontal" id="userInfo" enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">头像:</label>
+            <div class="col-sm-4">
+                <input type="file" name="file">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Nickname" class="col-sm-2 control-label">昵称:</label>
+            <div class="col-sm-4">
+                <input type="email" class="form-control" id="Nickname" placeholder="昵称" name="Nickname">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Email" class="col-sm-2 control-label">Email:</label>
+            <div class="col-sm-4">
+                <input type="email" class="form-control" id="Email" placeholder="Email" name="Email">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Pass" class="col-sm-2 control-label">密码</label>
+            <div class="col-sm-4">
+                <input type="password" class="form-control" id="Pass" placeholder="Password" name="Pass">
+            </div>
+        </div>
+        <span id="prompt" class="text-danger"></span>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <p id="userSubmit" class="btn btn-primary">保存</p>
+            </div>
+        </div>
+    </form>
+</div>
+    
+       
+    <!-- Javascript -->          
+    <script src="../../static/assets/plugins/jquery-3.3.1.min.js"></script>
+    <script src="../../static/assets/plugins/popper.min.js"></script>
+    <script src="../../static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    
+    <!-- Style Switcher (REMOVE ON YOUR PRODUCTION SITE) -->
+    <script src="../../static/assets/js/demo/style-switcher.js"></script>
+    
+
+</body>
+<script type="text/javascript">
+
+    $("#userSubmit").click(function () {
+        var form = new FormData(document.getElementById("userInfo"))
+        $.ajax({
+            type: "post",
+            url: "/user",
+            data: form,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                console.log(result)
+                alert(result.msg);
+                if(result.code){
+                    location.href="/"
+                }
+            }
+        })
+
+    })
+</script>
+</html> 
+

@@ -28,10 +28,15 @@ public class ArticleController {
      * @return
      */
     @PutMapping("/create")
+    @ResponseBody
     public Msg createArticle(Article article, HttpSession session){
         User userInfo = (User)session.getAttribute("userInfo");
-        article.setUserId(userInfo.getId());
-        return articleService.addArticle(article);
+        if(userInfo==null){
+            return Msg.fail("请先登录!!!");
+        }else{
+            article.setUserId(userInfo.getId());
+            return articleService.addArticle(article);
+        }
     }
 
     /**
