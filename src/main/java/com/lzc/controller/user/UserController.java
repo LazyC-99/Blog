@@ -84,6 +84,7 @@ public class UserController {
             // 写入文件
             try {
                 file.transferTo(filePath);
+                //保存文件路径到用户信息
                 user.setAvatar("/file/"+fileName);
             } catch (IOException e) {
                 System.out.println("上传失败!!");

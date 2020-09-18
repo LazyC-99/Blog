@@ -109,6 +109,16 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
+    @Override
+    public Msg likeArticle(Integer Id) {
+        List<Article> likeArticles = articleMapper.getLikeArticles();
+        if (likeArticles.size()>0){
+            return Msg.success("查询喜欢文章!!").add("articles",likeArticles);
+        }else {
+            return Msg.success("没有喜欢的文章!!");
+        }
+    }
+
 
     /**
      * 根据id查文章和评论并增加阅读数
@@ -116,14 +126,18 @@ public class ArticleServiceImpl implements ArticleService {
      * @return
      */
     @Override
-    public Msg getArticleById(Integer id) {
+    public Msg getArticleById(Integer id,Integer uId) {
         Article article = articleMapper.getArticleById(id);
         article.setViewCount(article.getViewCount()+1);
         if(article!=null){
+            //收藏状态
+            boolean like = false;
             articleMapper.updateArticle(article);
 //            articleMapper.setViewCount(article.getId(),article.getViewCount()+1);
+            //查询此文章瓶评论
             List<Comment> comments = commentMapper.getCommentByArticle(article.getId());
-            return Msg.success("文章查询成功!!").add("articleInfo",article).add("articleComment",comments);
+            like = articleMapper.getLikeInfo(uId,id)==1?true:false;
+            return Msg.success("文章查询成功!!").add("articleInfo",article).add("articleComment",comments).add("articleLike",like);
         }else{
             return Msg.fail("文章不存在");
         }
@@ -177,6 +191,41 @@ public class ArticleServiceImpl implements ArticleService {
 
     }
 
+    /**
+     * 喜欢文章
+     * @param id
+     * @param articleid
+     * @return
+     */
+    @Override
+    public Msg like(Integer id, Integer articleid) {
+        if (articleMapper.insertLikeInfo(id, articleid)==1){
+            return Msg.success("喜欢成功!!");
+        }else{
+            return Msg.fail("喜欢失败!!");
+        }
+    }
+
+    /**
+     * 取消喜欢文章
+     * @param id
+     * @param articleid
+     * @return
+     */
+    @Override
+    public Msg dislike(Integer id, Integer articleid) {
+        if (articleMapper.delLikeInfo(id, articleid)==1){
+            return Msg.success("取消star成功!!");
+        }else{
+            return Msg.fail("取消star失败!!");
+        }
+    }
+
+    /**
+     * 删除评论
+     * @param commentId
+     * @return
+     */
     @Override
     public Msg delComment(Integer commentId) {
         commentMapper.delComment(commentId);

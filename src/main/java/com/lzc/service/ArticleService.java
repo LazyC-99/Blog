@@ -16,11 +16,19 @@ public interface ArticleService {
 
     Msg updateStatus(Integer id,Integer StatusId);
 
-    Msg getArticleById(Integer id);
+    Msg getArticleById(Integer id,Integer uId);
 
     Msg getArticleByUser(Integer UserId);
+
+    //查询喜欢文章
+    Msg likeArticle(Integer Id);
+
 
     Msg addComment(Comment comment);
 
     Msg delComment(Integer commentId);
+    //标记like
+    Msg like(Integer id,Integer articleid);
+
+    Msg dislike(Integer id, Integer articleid);
 }

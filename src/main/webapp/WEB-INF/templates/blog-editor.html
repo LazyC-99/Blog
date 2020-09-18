@@ -25,14 +25,18 @@
 
 
 <div class="main-wrapper">
-    <h3>标题</h3>
-    <div class="input-group">
-        <input type="text" name="Title" id="Title" placeholder="文章标题...">
+    <div class="form-group">
+        <label for="Title" class="col-sm-2 control-label"><h3>标题:</h3></label>
+        <div class="col-sm-4">
+            <input type="email" class="form-control" id="Title" placeholder="文章标题..." name="Title">
+        </div>
     </div>
-    <h3>内容</h3>
-    <div  id="article-editor"><p> 输入文章内容...</p></div>
-    <div style="text-align: right">
-        <button id="article-submit" class="btn btn-primary " >发布文章</button>
+    <div class="form-group">
+        <label for="article-editor" class="col-sm-2 control-label"><h3>内容</h3></label>
+        <div  id="article-editor"><p> 输入文章内容...</p></div>
+        <div style="text-align: right">
+            <button id="article-submit" class="btn btn-primary " >发布文章</button>
+        </div>
     </div>
 </div>
     

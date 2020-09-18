@@ -41,6 +41,9 @@
     <select id="getAllArticles" resultType="com.lzc.bean.Article">
         select <include refid="Alias_Column_List"/> from article where aticle_status=1
     </select>
+    <select id="getLikeArticles" resultType="com.lzc.bean.Article">
+        select <include refid="Alias_Column_List"/> FROM article_like l LEFT JOIN article a ON l.like_article_id = a.article_id WHERE l.like_user_id=1 and aticle_status = 1
+    </select>
     <select id="getArticleById" resultType="com.lzc.bean.Article">
         select <include refid="Alias_Column_List"/> from article where article_id=#{Id} and aticle_status=1
     </select>
@@ -87,4 +90,16 @@
     <update id="setViewCount">
         update article set article_view_count=#{param2,jdbcType=INTEGER} where article_id = #{param1,jdbcType=BIGINT}
     </update>
+
+    <insert id="insertLikeInfo" >
+        insert into article_like values (#{param1},#{param2})
+    </insert>
+
+    <select id="getLikeInfo" resultType="java.lang.Integer">
+        select count(*) from article_like where like_user_id=#{param1} and like_article_id=#{param2}
+    </select>
+
+    <delete id="delLikeInfo">
+        DELETE FROM article_like WHERE like_user_id =#{param1} and like_article_id =#{param2}
+    </delete>
 </mapper>

@@ -30,7 +30,7 @@ public class ArticleController {
     @PutMapping("/create")
     @ResponseBody
     public Msg createArticle(Article article, HttpSession session){
-        User userInfo = (User)session.getAttribute("userInfo");
+        User userInfo = this.getCurrentUser(session);
         if(userInfo==null){
             return Msg.fail("请先登录!!!");
         }else{
@@ -53,14 +53,21 @@ public class ArticleController {
         return "index";
     }
 
+
+
     /**
      * 单篇文章查看
      * @param id
      * @return
      */
     @GetMapping("/topics/{id}")
-    public String getArticle(@PathVariable Integer id,Model model){
-        model.addAttribute("msg",articleService.getArticleById(id));
+    public String getArticle(@PathVariable Integer id,Model model,HttpSession session){
+        User user =this.getCurrentUser(session);
+        if(user==null){
+            user = new User();
+            user.setId(0);
+        }
+        model.addAttribute("msg",articleService.getArticleById(id,user.getId()));
         return "blog-detail";
     }
 
@@ -103,7 +110,7 @@ public class ArticleController {
     @PutMapping("/comment")
     @ResponseBody
     public Msg createComment(Comment comment,HttpSession session){
-        User userInfo = (User)session.getAttribute("userInfo");
+        User userInfo = this.getCurrentUser(session);
         if(userInfo==null){
             return Msg.fail("请先登录!!");
         }else{
@@ -112,11 +119,72 @@ public class ArticleController {
         }
     }
 
+    /**
+     * 删除评论
+     * @param commentId
+     * @return
+     */
     @DeleteMapping("/comment")
     public Msg delComment(Integer commentId){
         return articleService.delComment(commentId);
     }
 
+    /**
+     * star文章
+     * @param session
+     * @param Articleid
+     * @return
+     */
+    @PostMapping("/star")
+    @ResponseBody
+    public Msg likeArticle(HttpSession session,Integer Articleid){
+        User userInfo = this.getCurrentUser(session);
+        if (userInfo!=null){
+            return articleService.like(userInfo.getId(),Articleid);
+        }else{
+            return Msg.fail("请先登录!!");
+        }
 
+    }
+    /**
+     * 取消star文章
+     * @param session
+     * @param Articleid
+     * @return
+     */
+    @PostMapping("/cancelStar")
+    @ResponseBody
+    public Msg dislikeArticle(HttpSession session,Integer Articleid){
+        User userInfo = this.getCurrentUser(session);
+        if (userInfo!=null){
+            return articleService.dislike(userInfo.getId(),Articleid);
+        }else{
+            return Msg.fail("请先登录!!");
+        }
+
+    }
+    /**
+     * 查询喜欢文章
+     * @param currentPage
+     * @param session
+     * @param model
+     * @return
+     */
+    @GetMapping("/like")
+    public String getArticleLike(@RequestParam(value = "currentPage",defaultValue ="1")Integer currentPage,HttpSession session,Model model){
+        User user = this.getCurrentUser(session);
+        PageHelper.startPage(currentPage,3);
+        PageHelper.orderBy("article_id asc");
+
+        PageInfo pageInfo = new PageInfo((List) articleService.likeArticle(user.getId()).getExtend().get("articles"));
+        model.addAttribute("msg",pageInfo);
+        return "blog-star";
+    }
+
+
+    public User getCurrentUser(HttpSession session){
+        User userInfo = (User)session.getAttribute("userInfo");
+        return userInfo;
+    }
 
 }

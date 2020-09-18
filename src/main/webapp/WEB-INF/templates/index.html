@@ -52,7 +52,7 @@
 									<span class="comment" th:text="${article.CommentCount}+'comment'"><a href="#"><span class="glyphicon glyphicon-envelope"></span>评论数量</a></span>
 									<span class="view" th:text="${article.ViewCount}+'read'"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span><a href="#">查看次数</a></span>
 								</div>
-								<div class="intro" th:text="${#strings.abbreviate(article.Content,53)}">这里是内容...</div>
+								<div class="intro" th:utext="${#strings.abbreviate(article.Content,53)}">这里是内容...</div>
 								<a class="more-link" href="blog-post.html" th:href="'/article/topics/'+${article.Id}">Read more &rarr;</a>
 							</div><!--//media-body-->
 						</div><!--//media-->

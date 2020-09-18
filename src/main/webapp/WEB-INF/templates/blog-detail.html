@@ -40,10 +40,15 @@
 					<span class="time" th:text="'最后更新:'+${#dates.format(msg.extend.articleInfo.UpdateTime, 'yyyy-MM-dd')}">最后更新</span>
 					<span class="comment" th:text="${msg.extend.articleInfo.CommentCount}+'comment'"><a href="#"><span class="glyphicon glyphicon-envelope"></span>评论数量</a></span>
 					<span class="view" th:text="${msg.extend.articleInfo.ViewCount}+'read'"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span><a href="#">查看次数</a></span>
+					<span class="likeStatus">
+						<img class="like" style="width: 20px;height: 20px;display: none" src="/static/assets/images/tobarCollect.png" th:style="${msg.extend.articleLike?'width: 20px;height: 20px;display: none':'width: 20px;height: 20px'}" >
+						<img class="dislike" style="width: 20px;height: 20px"  src="/static/assets/images/tobarCollectionActive.png" th:style="${msg.extend.articleLike?'width: 20px;height: 20px':'width: 20px;height: 20px;display: none'}">
+
+					</span>
 				</div>
 			</header>
 
-			<div class="blog-post-body" th:text="${msg.extend.articleInfo.Content}">
+			<div class="blog-post-body"  th:utext="${msg.extend.articleInfo.Content}">
 				这里是内容!!!!
 				<br/><br/><br/><br/><br/><br/><br/><br/>
 
@@ -134,8 +139,9 @@
 	eds[0].style = eds[0].style.cssText + 'height: 100px'
 
 
-	document.getElementById('comment-submit').addEventListener('click', function () {
 
+	//提交评论
+	document.getElementById('comment-submit').addEventListener('click', function () {
 		$.ajax({
 			type:"put",
 			url:"/article/comment",
@@ -154,6 +160,52 @@
 
 		})
 	}, false)
+
+	//喜欢状态切换
+	$(".likeStatus").click(function () {
+		var a =($(".dislike").css("display"))
+		var b =($(".like").css("display"))
+		console.log(a)
+		console.log(b)
+		//喜欢
+		if(a=="none"){
+			$.ajax({
+				type: "post",
+				url:"/article/star",
+				data:{
+					"Articleid":$("#articleId").val()
+				},
+				success:function (result) {
+					console.log(result)
+					if(result.code){
+						$(".like").css('display',a)
+						$(".dislike").css('display',b)
+					}
+				}
+
+			})
+		}
+		//取消喜欢
+		if(b=="none"){
+			$.ajax({
+				type: "post",
+				url:"/article/cancelStar",
+				data:{
+					"Articleid":$("#articleId").val()
+				},
+				success:function (result) {
+					console.log(result)
+					if(result.code){
+						$(".like").css('display',a)
+						$(".dislike").css('display',b)
+					}
+				}
+			})
+		}
+
+
+
+	})
 
 
 </script>
