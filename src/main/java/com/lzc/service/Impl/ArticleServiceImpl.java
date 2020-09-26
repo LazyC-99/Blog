@@ -243,4 +243,18 @@ public class ArticleServiceImpl implements ArticleService {
         Date cur_time = sdf.parse(format);
         return cur_time;
     }
+
+    /**
+     * 模糊查询
+     * @return
+     */
+    @Override
+    public Msg searchByContent(String search) {
+        List<Article> allArticles = articleMapper.searchBy(search);
+        if (allArticles.size()>0){
+            return Msg.success("模糊查询文章!!").add("articles",allArticles);
+        }else {
+            return Msg.success("没有相关文章!!");
+        }
+    }
 }

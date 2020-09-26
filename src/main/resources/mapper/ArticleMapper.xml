@@ -98,6 +98,9 @@
     <select id="getLikeInfo" resultType="java.lang.Integer">
         select count(*) from article_like where like_user_id=#{param1} and like_article_id=#{param2}
     </select>
+    <select id="searchBy" resultType="com.lzc.bean.Article">
+        select <include refid="Alias_Column_List"/> from article where aticle_status =1 and article_title like "%"#{param1}"%" or aticle_status =1 and article_content like "%"#{param1}"%"
+    </select>
 
     <delete id="delLikeInfo">
         DELETE FROM article_like WHERE like_user_id =#{param1} and like_article_id =#{param2}

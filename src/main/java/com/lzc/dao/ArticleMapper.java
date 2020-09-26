@@ -27,4 +27,6 @@ public interface ArticleMapper {
     int delLikeInfo(Integer uId,Integer aId);
 
     int getLikeInfo(Integer uId,Integer aId);
+
+    List<Article> searchBy(String search);
 }

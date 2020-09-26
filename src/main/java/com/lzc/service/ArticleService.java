@@ -31,4 +31,6 @@ public interface ArticleService {
     Msg like(Integer id,Integer articleid);
 
     Msg dislike(Integer id, Integer articleid);
+
+    Msg searchByContent(String search);
 }

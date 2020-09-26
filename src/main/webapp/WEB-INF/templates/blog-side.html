@@ -9,7 +9,7 @@
 
 
 <header class="header text-center" th:fragment="side">
-    <h1 class="blog-name pt-lg-4 mb-0"><a th:href="@{/blog-user}"  th:text="${session.userInfo==null?'请登录':session.userInfo.Nickname}">Anthony's Blog</a></h1>
+    <h1 class="blog-name pt-lg-4 mb-0"><a th:text="${session.userInfo==null?'请登录':session.userInfo.Nickname}">Anthony's Blog</a></h1>
 
     <nav class="navbar navbar-expand-lg navbar-dark" >
 

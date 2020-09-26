@@ -44,12 +44,19 @@ public class ArticleController {
      * @return
      */
     @GetMapping("/list")
-    public String getAllArticle(@RequestParam(value = "currentPage",defaultValue ="1")Integer currentPage,Model model){
+    public String getAllArticle(@RequestParam(value = "currentPage",defaultValue ="1")Integer currentPage,Model model,String search){
         PageHelper.startPage(currentPage,3);
         PageHelper.orderBy("article_id asc");
+        System.out.println("模糊查询:"+search);
+        if (search==null||search.equals("")){
+            PageInfo pageInfo = new PageInfo((List) articleService.AllArticle().getExtend().get("articles"));
+            model.addAttribute("msg",pageInfo);
+        }else{
+            PageInfo pageInfo = new PageInfo((List) articleService.searchByContent(search).getExtend().get("articles"));
+            model.addAttribute("msg",pageInfo);
+            model.addAttribute("search",search);
+        }
 
-        PageInfo pageInfo = new PageInfo((List) articleService.AllArticle().getExtend().get("articles"));
-        model.addAttribute("msg",pageInfo);
         return "index";
     }
 
